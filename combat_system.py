@@ -8,6 +8,7 @@ AI Usage: [Document any AI assistance used]
 
 Handles combat mechanics
 """
+import random
 
 from custom_exceptions import (
     InvalidTargetError,
