@@ -33,88 +33,107 @@ game_running = False
 # ============================================================================
 
 def main_menu():
+    """Display the main menu and get player's choice"""
     print("\n=== MAIN MENU ===")
     print("1. New Game")
     print("2. Load Game")
     print("3. Exit")
 
+    # Get input from the player
     choice = input("Enter choice (1-3): ")
 
+    # Keep asking if input is invalid
     while choice not in ["1", "2", "3"]:
         choice = input("Invalid. Enter 1-3: ")
 
+    # Return the choice as a number
     return int(choice)
 
 
 def new_game():
-   global current_character
+    """Start a new game and create a new character"""
+    global current_character
 
-   print("\n=== NEW GAME ===")
+    print("\n=== NEW GAME ===")
 
-   name = input("Enter character name: ")
+    # Ask the player for a character name
+    name = input("Enter character name: ")
 
-   print("\nChoose class:")
-   print("1. Warrior")
-   print("2. Mage")
-   print("3. Rogue")
+    # Ask the player to choose a class
+    print("\nChoose class:")
+    print("1. Warrior")
+    print("2. Mage")
+    print("3. Rogue")
 
-   cls_choice = input("Enter choice (1-3): ")
+    cls_choice = input("Enter choice (1-3): ")
 
-   while cls_choice not in ["1", "2", "3"]:
+    # Validate input
+    while cls_choice not in ["1", "2", "3"]:
         cls_choice = input("Invalid. Enter 1-3: ")
 
-   if cls_choice == "1":
+    # Convert number to class name
+    if cls_choice == "1":
         character_class = "warrior"
-   elif cls_choice == "2":
+    elif cls_choice == "2":
         character_class = "mage"
-   else:
+    else:
         character_class = "rogue"
 
-   try:
+    # Try to create the character
+    try:
         current_character = character_manager.create_character(name, character_class)
         print("\nCharacter created successfully!\n")
-        game_loop()
-   except InvalidCharacterClassError:
+        game_loop()  # Start the game loop
+    except InvalidCharacterClassError:
         print("\nInvalid class selected.\n")
 
+
 def load_game():
+    """Load an existing saved game"""
     global current_character
 
     print("\n=== LOAD GAME ===")
 
+    # Get list of saved characters
     saves = character_manager.list_saved_characters()
 
+    # If no saves found
     if len(saves) == 0:
         print("No saved games found.")
         return
 
+    # Display saved characters
     print("\nSaved characters:")
     index = 1
     for s in saves:
         print(str(index) + ". " + s)
         index += 1
 
+    # Ask player to choose a save
     choice = input("Choose a character: ")
 
+    # Validate input
     while not choice.isdigit() or int(choice) < 1 or int(choice) > len(saves):
         choice = input("Invalid. Choose again: ")
 
+    # Load the selected character
     name = saves[int(choice) - 1]
-
     try:
         current_character = character_manager.load_character(name)
         print("\nGame loaded!\n")
-        game_loop()
+        game_loop()  # Start the game loop
     except CharacterNotFoundError:
         print("Save not found.")
     except SaveFileCorruptedError:
         print("Save file corrupted.")
 
-# ============================================================================
-# GAME LOOP
+
+# ============================================================================ 
+# GAME LOOP FUNCTIONS
 # ============================================================================
 
 def game_loop():
+    """The main in-game loop where the player chooses actions"""
     global game_running
 
     game_running = True
@@ -122,6 +141,7 @@ def game_loop():
     while game_running:
         choice = game_menu()
 
+        # Perform actions based on player's choice
         if choice == 1:
             view_character_stats()
         elif choice == 2:
@@ -137,7 +157,9 @@ def game_loop():
             print("Game saved. Returning to main menu.")
             game_running = False
 
+
 def game_menu():
+    """Display the in-game menu and get player's choice"""
     print("\n=== GAME MENU ===")
     print("1. View Character Stats")
     print("2. View Inventory")
@@ -148,34 +170,39 @@ def game_menu():
 
     choice = input("Enter choice: ")
 
+    # Validate input
     while choice not in ["1","2","3","4","5","6"]:
         choice = input("Invalid. Enter 1-6: ")
 
     return int(choice)
 
-# ============================================================================
-# GAME ACTIONS
+
+# ============================================================================ 
+# GAME ACTION FUNCTIONS
 # ============================================================================
 
 def view_character_stats():
-  global current_character
+    """Display the character's stats and quest progress"""
+    global current_character
 
-  print("\n=== CHARACTER STATS ===")
-  character_manager.display_character(current_character)
+    print("\n=== CHARACTER STATS ===")
+    character_manager.display_character(current_character)
 
-  print("\nActive quests:")
-  quest_handler.display_active_quests(current_character, all_quests)
+    print("\nActive quests:")
+    quest_handler.display_active_quests(current_character, all_quests)
 
-  print("\nCompleted quests:")
-  quest_handler.display_completed_quests(current_character, all_quests)
+    print("\nCompleted quests:")
+    quest_handler.display_completed_quests(current_character, all_quests)
 
 
 def view_inventory():
+    """Display inventory and allow the player to interact with items"""
     global current_character, all_items
 
     print("\n=== INVENTORY ===")
     inventory_system.display_inventory(current_character, all_items)
 
+    # Inventory options
     print("Options:")
     print("1. Use item")
     print("2. Equip weapon")
@@ -185,6 +212,7 @@ def view_inventory():
 
     choice = input("Enter choice: ")
 
+    # Handle player's choice
     if choice == "1":
         item = input("Enter item ID to use: ")
         if item in all_items:
@@ -217,41 +245,44 @@ def view_inventory():
         except Exception as e:
             print("Error:", e)
 
+
 def quest_menu():
-   global current_character, all_quests
+    """Display quest options and allow the player to manage quests"""
+    global current_character, all_quests
 
-   print("\n=== QUEST MENU ===")
-   print("1. View Active Quests")
-   print("2. View Available Quests")
-   print("3. View Completed Quests")
-   print("4. Accept Quest")
-   print("5. Abandon Quest")
-   print("6. Complete Quest (DEBUG)")
-   print("7. Back")
+    print("\n=== QUEST MENU ===")
+    print("1. View Active Quests")
+    print("2. View Available Quests")
+    print("3. View Completed Quests")
+    print("4. Accept Quest")
+    print("5. Abandon Quest")
+    print("6. Complete Quest (DEBUG)")
+    print("7. Back")
 
-   choice = input("Enter choice: ")
+    choice = input("Enter choice: ")
 
-   if choice == "1":
+    # Perform actions based on choice
+    if choice == "1":
         quest_handler.display_active_quests(current_character, all_quests)
-   elif choice == "2":
+    elif choice == "2":
         quest_handler.display_available_quests(current_character, all_quests)
-   elif choice == "3":
+    elif choice == "3":
         quest_handler.display_completed_quests(current_character, all_quests)
-   elif choice == "4":
+    elif choice == "4":
         q = input("Enter quest ID: ")
         try:
             quest_handler.accept_quest(current_character, q, all_quests)
             print("Quest accepted!")
         except Exception as e:
             print("Error:", e)
-   elif choice == "5":
+    elif choice == "5":
         q = input("Enter quest ID: ")
         try:
             quest_handler.abandon_quest(current_character, q)
             print("Quest abandoned.")
         except Exception as e:
             print("Error:", e)
-   elif choice == "6":
+    elif choice == "6":
         q = input("Enter quest ID: ")
         try:
             quest_handler.complete_quest(current_character, q, all_quests)
@@ -261,23 +292,28 @@ def quest_menu():
 
 
 def explore():
+    """Handle exploration and battles in the wild"""
     global current_character
 
     print("\nYou venture into the wilderness...")
 
+    # Generate an enemy based on player's level
     enemy = combat_system.generate_enemy(current_character["level"])
     print("A wild " + enemy["name"] + " appears!")
 
+    # Start a battle
     battle = combat_system.SimpleBattle(current_character, enemy)
     result = battle.start()
 
     print(result)
 
+    # Check if character died
     if result == "defeat":
         handle_character_death()
 
 
 def shop():
+    """Allow the player to buy and sell items"""
     global current_character, all_items
 
     print("\n=== SHOP ===")
@@ -285,10 +321,12 @@ def shop():
     print("Your gold:", current_character["gold"])
     print("\nItems for sale:")
 
+    # Display all items for sale
     for item_id in all_items:
         item = all_items[item_id]
         print(item_id + " - " + item["name"] + " (" + str(item["cost"]) + "g)")
 
+    # Shop options
     print("\nOptions:")
     print("1. Buy item")
     print("2. Sell item")
@@ -296,6 +334,7 @@ def shop():
 
     choice = input("Enter choice: ")
 
+    # Handle buying items
     if choice == "1":
         item_id = input("Enter item ID to buy: ")
         if item_id in all_items:
@@ -306,6 +345,7 @@ def shop():
                 print("Error:", e)
         else:
             print("Unknown item.")
+    # Handle selling items
     elif choice == "2":
         item_id = input("Enter item ID to sell: ")
         if item_id in all_items:
@@ -315,11 +355,13 @@ def shop():
             except Exception as e:
                 print("Error:", e)
 
-# ============================================================================
+
+# ============================================================================ 
 # HELPER FUNCTIONS
 # ============================================================================
 
 def save_game():
+    """Save the current character's progress"""
     global current_character
 
     try:
@@ -328,7 +370,9 @@ def save_game():
     except Exception:
         print("Error saving game.")
 
+
 def load_game_data():
+    """Load all game quests and items"""
     global all_quests, all_items
 
     try:
@@ -338,12 +382,15 @@ def load_game_data():
         raise
     except InvalidDataFormatError:
         raise
-    
+
+
 def handle_character_death():
+    """Handle what happens when the character dies"""
     global current_character, game_running
 
     print("\nYou have died!")
 
+    # Offer options to revive or quit
     print("1. Revive (25 gold)")
     print("2. Quit")
 
@@ -359,25 +406,25 @@ def handle_character_death():
     else:
         game_running = False
 
+
 def display_welcome():
-    """Display welcome message"""
+    """Display welcome message when game starts"""
     print("=" * 50)
     print("     QUEST CHRONICLES - A MODULAR RPG ADVENTURE")
     print("=" * 50)
     print("\nWelcome to Quest Chronicles!")
-    print("Build your character, complete quests, and become a legend!")
-    print()
+    print("Build your character, complete quests, and become a legend!\n")
 
-# ============================================================================
+
+# ============================================================================ 
 # MAIN EXECUTION
 # ============================================================================
 
 def main():
     """Main game execution function"""
-    
     # Display welcome message
     display_welcome()
-    
+
     # Load game data
     try:
         load_game_data()
@@ -390,11 +437,11 @@ def main():
         print(f"Error loading game data: {e}")
         print("Please check data files for errors.")
         return
-    
+
     # Main menu loop
     while True:
         choice = main_menu()
-        
+
         if choice == 1:
             new_game()
         elif choice == 2:
@@ -404,6 +451,7 @@ def main():
             break
         else:
             print("Invalid choice. Please select 1-3.")
+
 
 if __name__ == "__main__":
     main()
