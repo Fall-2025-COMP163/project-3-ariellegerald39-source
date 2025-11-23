@@ -25,6 +25,57 @@ MAX_INVENTORY_SIZE = 20
 
 def add_item_to_inventory(character, item_id):
     """
+    Add an item to the character's inventory.
+
+    Raises:
+        InventoryFullError: if inventory is full.
+    """
+    if len(character['inventory']) >= MAX_INVENTORY_SIZE:
+        raise InventoryFullError("Inventory is full")
+    character['inventory'].append(item_id)
+    return True
+
+
+def remove_item_from_inventory(character, item_id):
+    """
+    Remove an item from the character's inventory.
+
+    Raises:
+        ItemNotFoundError: if the item is not in inventory.
+     """
+    if item_id not in character['inventory']:
+        raise ItemNotFoundError(f"Item {item_id} not in inventory")
+    character['inventory'].remove(item_id)
+    return True
+
+
+def has_item(character, item_id):
+    """Return True if character has the item in inventory."""
+    return item_id in character['inventory']
+
+
+def count_item(character, item_id):
+    """Return the quantity of a specific item in inventory."""
+    return character['inventory'].count(item_id)
+
+
+def get_inventory_space_remaining(character):
+    """Return the number of empty slots in inventory."""
+    return MAX_INVENTORY_SIZE - len(character['inventory'])
+
+
+def clear_inventory(character):
+    """Clear the inventory and return the list of removed items."""
+    items = character['inventory'][:]
+    character['inventory'].clear()
+    return items
+
+# ============================================================================ #
+# ITEM USAGE
+# ============================================================================ #
+
+def use_item(character, item_id, item_data):
+    """
     Use a consumable item, applying its effect to the character.
 
     Raises:
@@ -43,6 +94,7 @@ def add_item_to_inventory(character, item_id):
     character["inventory"].remove(item_id)
     item_name = item_data.get("name", item_id)
     return f"Used {item_name} (+{value} {stat_name})"
+
 
 def equip_weapon(character, item_id, item_data):
     """
@@ -81,6 +133,7 @@ def equip_weapon(character, item_id, item_data):
     item_name = item_data.get("name", item_id)
     return "Equipped weapon: " + item_name
 
+
 def equip_armor(character, item_id, item_data):
     """
     Equip armor, applying its stat bonuses and unequipping old armor if any.
@@ -118,6 +171,7 @@ def equip_armor(character, item_id, item_data):
     item_name = item_data.get("name", item_id)
     return "Equipped armor: " + item_name
 
+
 def unequip_weapon(character):
     """
     Unequip current weapon and return it to inventory.
@@ -140,6 +194,7 @@ def unequip_weapon(character):
     character["equipped_weapon_data"] = None
 
     return weapon_id
+
 
 def unequip_armor(character):
     """
@@ -164,9 +219,9 @@ def unequip_armor(character):
 
     return armor_id
 
-# ============================================================================
+# ============================================================================ #
 # SHOP SYSTEM
-# ============================================================================
+# ============================================================================ #
 
 def purchase_item(character, item_id, item_data):
     """
@@ -186,6 +241,7 @@ def purchase_item(character, item_id, item_data):
     character["inventory"].append(item_id)
     return True
 
+
 def sell_item(character, item_id, item_data):
     """
     Sell an item from inventory for half its cost.
@@ -201,9 +257,9 @@ def sell_item(character, item_id, item_data):
     character["gold"] += sell_price
     return sell_price
 
-# ============================================================================
+# ============================================================================ #
 # HELPER FUNCTIONS
-# ============================================================================
+# ============================================================================ #
 
 def parse_item_effect(effect_string):
     """
@@ -218,6 +274,7 @@ def parse_item_effect(effect_string):
         raise InvalidItemTypeError("Effect value must be an integer")
     return stat, value
 
+
 def apply_stat_effect(character, stat_name, value):
     """
     Apply an effect to a character's stat (e.g., health, strength).
@@ -226,6 +283,7 @@ def apply_stat_effect(character, stat_name, value):
     character[stat_name] = character.get(stat_name, 0) + value
     if stat_name == "health" and character["health"] > character["max_health"]:
         character["health"] = character["max_health"]
+
 
 def display_inventory(character, item_data_dict):
     """
