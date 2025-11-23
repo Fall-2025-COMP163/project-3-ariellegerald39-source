@@ -4,7 +4,8 @@ Character Manager Module - Starter Code
 
 Name: Arielle Gerald
 
-AI Usage: This entire file was written with the assistance of AI.
+AI Usage: This project was completed with full assistance from Chat GPT. 
+I have reviewed and studied the project to ensure understanding.
 
 This module handles character creation, loading, and saving.
 """

@@ -4,7 +4,9 @@ Main Game Module - Starter Code
 
 Name: Arielle Gerald
 
-AI Usage: [Document any AI assistance used]
+AI Usage: This project was completed with full assistance from Chat GPT. 
+I have reviewed and studied the project to ensure understanding.
+
 
 This is the main game file that ties all modules together.
 Demonstrates module integration and complete game flow.

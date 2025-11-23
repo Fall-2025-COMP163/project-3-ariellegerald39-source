@@ -4,7 +4,9 @@ Combat System Module - Starter Code
 
 Name: Arielle Gerald
 
-AI Usage: [Document any AI assistance used]
+AI Usage: This project was completed with full assistance from Chat GPT. 
+I have reviewed and studied the project to ensure understanding.
+
 
 Handles combat mechanics
 """
