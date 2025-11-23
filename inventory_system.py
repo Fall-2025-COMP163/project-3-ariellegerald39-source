@@ -24,32 +24,31 @@ MAX_INVENTORY_SIZE = 20
 # ============================================================================
 
 def add_item_to_inventory(character, item_id):
-    if len(character["inventory"]) >= MAX_INVENTORY_SIZE:
+   if len(character['inventory']) >= MAX_INVENTORY_SIZE:
         raise InventoryFullError("Inventory is full")
-
-    character["inventory"].append(item_id)
-    return True
+   character['inventory'].append(item_id)
+   return True
 
 def remove_item_from_inventory(character, item_id):
-    if item_id not in character["inventory"]:
-        raise ItemNotFoundError("Item not found: " + item_id)
-
-    character["inventory"].remove(item_id)
+    if item_id not in character['inventory']:
+        raise ItemNotFoundError(f"Item {item_id} not in inventory")
+    character['inventory'].remove(item_id)
     return True
 
 def has_item(character, item_id):
-    return item_id in character["inventory"]
+    return item_id in character['inventory']
 
 def count_item(character, item_id):
-   return character["inventory"].count(item_id)
+   return character['inventory'].count(item_id)
 
 def get_inventory_space_remaining(character):
-     return MAX_INVENTORY_SIZE - len(character["inventory"])
+     return MAX_INVENTORY_SIZE - len(character['inventory'])
 
 def clear_inventory(character):
-    removed = character["inventory"]
-    character["inventory"] = []
-    return removed
+    items = character['inventory'][:]
+    character['inventory'].clear()
+    return items
+
 
 # ============================================================================
 # ITEM USAGE
