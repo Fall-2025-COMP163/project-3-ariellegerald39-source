@@ -47,7 +47,7 @@ def create_enemy(enemy_type):
         raise InvalidTargetError("Unknown enemy type: " + enemy_type)
 
     enemy = {}
-    enemy["name"] = enemy_type
+    enemy["name"] = enemy_type.capitalize()
     enemy["health"] = health
     enemy["max_health"] = health
     enemy["strength"] = strength
