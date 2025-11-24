@@ -1,151 +1,75 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/wnCpjX4n)
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=21701639&assignment_repo_type=AssignmentRepo)
-# COMP 163: Project 3 - Quest Chronicles
+My Game README
+Module	Purpose
+main.py: Launches the game and handles the main menu and game loop
+character_manager.py: Handles character creation, loading, saving, stats, and revives
+inventory_system.py: Manages inventory, item usage, equipping weapons/armor, buying/selling
+quest_handler.py: Manages quests, prerequisites, completion, and quest statistics
+combat_system.py: Handles enemy generation and battle mechanics
+game_data.py: Loads game data, validates item and quest files, provides default data
+custom_exceptions.py: Defines all custom exceptions used across modules
 
-**AI Usage: Free Use (with explanation requirement)**
+This modular structure keeps functionality separate, making the code easier to maintain, extend, and test.
 
-## Overview
+Exception Strategy
 
-Build a complete modular RPG adventure game demonstrating mastery of **exceptions and modules**.
+Custom exceptions are used to clearly signal errors and edge cases:
 
-## Getting Started
+Inventory Errors:
 
-### Step 1: Accept Assignment
-1. Click the assignment link provided in Blackboard
-2. Accept the assignment - this creates your personal repository
-3. Clone your repository to your local machine:
-```bash
-git clone [your-personal-repo-url]
-cd [repository-name]
-```
+InventoryFullError → raised when trying to add an item but inventory is full.
 
-### Step 2: Understand the Project Structure
+ItemNotFoundError → raised when trying to use, equip, sell, or remove an item that isn’t in the inventory.
 
-Your repository contains:
+InvalidItemTypeError → raised when an action is attempted on an incompatible item type.
 
-```
-quest_chronicles/
-├── main.py                     # Game launcher (COMPLETE THIS)
-├── character_manager.py        # Character creation/management (COMPLETE THIS)
-├── inventory_system.py         # Item and equipment management (COMPLETE THIS)
-├── quest_handler.py            # Quest system (COMPLETE THIS)
-├── combat_system.py            # Battle mechanics (COMPLETE THIS)
-├── game_data.py                # Data loading and validation (COMPLETE THIS)
-├── custom_exceptions.py        # Exception definitions (PROVIDED)
-├── data/
-│   ├── quests.txt             # Quest definitions (PROVIDED)
-│   ├── items.txt              # Item database (PROVIDED)
-│   └── save_games/            # Player save files (created automatically)
-├── tests/
-│   ├── test_module_structure.py       # Module organization tests
-│   ├── test_exception_handling.py     # Exception handling tests
-│   └── test_game_integration.py       # Integration tests
-└── README.md                   # This file
-```
+Resource Errors:
 
-### Step 3: Development Workflow
+InsufficientResourcesError → raised when a character does not have enough gold or other required resources.
 
-```bash
-# Work on one module at a time
-# Test your code frequently
+Quest Errors:
 
-# Commit and push to see test results
-git add .
-git commit -m "Implement character_manager module"
-git push origin main
+QuestNotFoundError → raised when referencing a quest that does not exist in the data.
 
-# Check GitHub for test results (green checkmarks = passed!, red xs = at least 1 failed test case. Click the checkmark or x and then "Details" to see what test cases passed/failed)
-```
+QuestRequirementsNotMetError → raised when prerequisites or level requirements are unmet.
 
-## Core Requirements (60 Points)
+QuestAlreadyCompletedError → raised if a completed quest is attempted again.
 
-### Critical Constraint
-You may **only** use concepts covered through the **Exceptions and Modules** chapters. 
+QuestNotActiveError → raised when trying to abandon or complete a quest that isn’t active.
 
-### 🎨 Creativity and Customization
+Using exceptions ensures strong error handling and communicates issues clearly to the player or developer.
 
-This project encourages creativity! Here's what you can customize:
+Design Choices
 
-**✅ FULLY CUSTOMIZABLE:**
-- **Character stats** - Adjust health, strength, magic for balance
-- **Enemy stats** - Make enemies easier or harder
-- **Special abilities** - Design unique abilities for each class
-- **Additional enemies** - Add your own enemy types beyond the required three
-- **Game mechanics** - Add status effects, combos, critical hits, etc.
-- **Quest rewards** - Adjust XP and gold amounts
-- **Item effects** - Create unique items with creative effects
+Modular Architecture: Each module has a single responsibility (combat, inventory, quests), which improves maintainability and readability.
 
-**⚠️ REQUIRED (for testing):**
-- **4 Character classes:** Warrior, Mage, Rogue, Cleric (names must match exactly)
-- **3 Enemy types:** "goblin", "orc", "dragon" (must exist, stats flexible)
-- **All module functions** - Must have the specified function signatures
-- **Exception handling** - Must raise appropriate exceptions
+Data-Driven Approach: Items and quests are stored in dictionaries with IDs as keys, allowing easy addition of new content without code changes.
 
-**💡 CREATIVITY TIPS:**
-1. Start with required features working
-2. Add creative elements incrementally
-3. Test after each addition
-4. Be ready to explain your design choices in the interview
-5. Bonus interview points for thoughtful, balanced customization!
+Stat Effects as Strings: Item effects are stored as strings ("health:20") and parsed, allowing flexible stat modifications.
 
-**Example Creative Additions:**
-- Vampire enemy that heals when attacking
-- Warrior "Last Stand" ability that activates when health is low
-- Poison status effect that deals damage over time
-- Critical hit system based on character stats
-- Rare "legendary" weapons with special effects
+Global Game State: The main.py file maintains the current character and game state, simplifying the main game loop.
 
-### Module 1: custom_exceptions.py (PROVIDED - 0 points to implement)
+Simple Terminal Interface: Prioritized clarity and accessibility for a text-based experience.
 
-**This module is provided complete.** It defines all custom exceptions you'll use throughout the project.
+AI Usage:
 
-### Module 2: game_data.py (10 points)
+This project was completed with full assistance from ChatGPT. Specific AI assistance included:
 
-### Module 3: character_manager.py (15 points)
+Writing starter and complete code for the inventory, quest, and main game modules.
 
-### Module 4: inventory_system.py (10 points)
+Designing exception handling strategies and modular architecture.
 
-### Module 5: quest_handler.py (10 points)
+Creating helper functions for quest and item management.
 
-### Module 6: combat_system.py (10 points)
+The code was carefully reviewed and tested to ensure full understanding.
 
-### Module 7: main.py (5 points)
+How to Play:
 
-## Automated Testing & Validation (60 Points)
+Clone the repository and navigate into it:
 
-## Interview Component (40 Points)
+git clone <repository_url>
+cd project-3-ariellegerald39-source
 
-**Creativity Bonus** (up to 5 extra points on interview):
-- Added 2+ custom enemy types beyond required three
-- Designed unique and balanced special abilities
-- Implemented creative game mechanics (status effects, advanced combat, etc.)
-- Thoughtful stat balancing with clear reasoning
 
-**Note:** Creativity is encouraged, but functionality comes first! A working game with required features scores higher than a broken game with lots of extras.
+Run the game:
 
-### Update README.md
-
-Document your project with:
-
-1. **Module Architecture:** Explain your module organization
-2. **Exception Strategy:** Describe when/why you raise specific exceptions
-3. **Design Choices:** Justify major decisions
-4. **AI Usage:** Detail what AI assistance you used
-5. **How to Play:** Instructions for running the game
-
-### What to Submit:
-
-1. **GitHub Repository:** Your completed multi-module project
-2. **Interview:** Complete 10-minute explanation session
-3. **README:** Updated documentation
-
-## Protected Files Warning
-
-⚠️ **IMPORTANT: Test Integrity**
-
-Test files are provided for your learning but are protected. Modifying test files constitutes academic dishonesty and will result in:
-
-- Automatic zero on the project
-- Academic integrity investigation
-
-You can view tests to understand requirements, but any modifications will be automatically detected.
+python main.py
